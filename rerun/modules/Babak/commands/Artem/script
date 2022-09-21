@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+#/ command: Lavinskyi:Gleb: "variables display"
+#/ usage: rerun Lavinskyi:Gleb [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "Artem" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+IFS=$'\n'
+for i in $(printenv)
+do
+  
+  IFS='=';
+  sep=($i);
+  if [ ${#sep[@]} -eq 2 ]
+  then
+    echo -e "\033[0;31m ${sep[0]} =\033[0;32m ${sep[1]}";
+  else
+    echo -e "\033[0;31m ${sep[0]} =";
+  fi
+done
+unset IFS;
+
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?
+
